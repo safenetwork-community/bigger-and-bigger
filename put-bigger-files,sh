@@ -1,0 +1,40 @@
+#! /bin/bash
+#
+# put succesively larger files until we find out where the testnet breaks
+
+
+DEST_DIR=./test-files
+for i in {5..100..5}     #5-100MB step 5MB
+do 
+  dd if=/dev/zero of=$DEST_DIR/testfile-$i.txt bs=1M count=$i 
+  echo ""
+  echo ""
+  time safe files put $DEST_DIR/testfile-$i.txt
+  echo ""
+  echo "----------------------------------------------------------"
+done 
+
+for i in {100..600..50}  #100-600MB step 50MB
+do 
+  dd if=/dev/zero of=$DEST_DIR/testfile-$i.txt bs=1M count=$i 
+  echo ""
+  echo ""
+  time safe files put $DEST_DIR/testfile-$i.txt
+  echo ""
+  echo "----------------------------------------------------------"
+done 
+
+for i in {600..1500..100}  #600-1500MB step 100MB
+do 
+  dd if=/dev/zero of=$DEST_DIR/testfile-$i.txt bs=1M count=$i 
+  echo ""
+  echo ""
+  time safe files put $DEST_DIR/testfile-$i.txt
+  echo ""
+  echo "----------------------------------------------------------"
+done 
+
+#clean up
+rm -vrf ./test-files/*   
+# If we get this far it did not break and we need to try larger filesizes. 
+#Clean up what we have done so far so we dont run out of disk space later.
